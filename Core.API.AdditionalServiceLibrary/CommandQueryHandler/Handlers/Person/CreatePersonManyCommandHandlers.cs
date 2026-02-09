@@ -1,5 +1,4 @@
-﻿using Core.API.AdditionalServiceLibrary;
-using Core.Library.ArivuTharavuThalam;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
@@ -7,10 +6,12 @@ namespace Core.API.AdditionalServiceLibrary
     public class CreatePersonManyCommandHandlers : IRequestHandler<CreatePersonManyCommand, IEnumerable<Person>>
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMediator mediator;
 
-        public CreatePersonManyCommandHandlers(IUnitOfWork unitOfWork)
+        public CreatePersonManyCommandHandlers(IUnitOfWork unitOfWork, IMediator mediator)
         {
             this.unitOfWork = unitOfWork;
+            this.mediator = mediator;
         }
 
         public async Task<IEnumerable<Person>> Handle(CreatePersonManyCommand request, CancellationToken cancellationToken)
@@ -26,6 +27,9 @@ namespace Core.API.AdditionalServiceLibrary
             });
 
             await unitOfWork.PersonRepository.CreateEntitiesAsync(Persons, cancellationToken).ConfigureAwait(false);
+
+            await mediator.Send(new MessagePublisherPersonManyCommand(request.Persons, MessageTypeConstant.PersonType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
+
             return Persons;
         }
     }
