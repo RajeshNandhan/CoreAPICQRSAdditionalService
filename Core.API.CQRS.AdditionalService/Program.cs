@@ -44,7 +44,7 @@ public static class Program
         builder.Services.AddApplicationServices(builder.Configuration);
 
         // Dependency Injection - MediatR
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CQRSStartUp).Assembly));
 
         // Services
         builder.Services.AddControllers();

@@ -36,10 +36,6 @@ namespace Core.API.CQRS.AdditionalService
 
             // Unit of Work
             services.AddScoped<IUnitOfWork, SqlDatabaseUnitOfWork>();
-
-            // Add Unit of Work and Directors
-            services.AddTransient<BookDirector>();
-            services.AddTransient<PersonDirector>();
         }
     }
 }
