@@ -1,5 +1,5 @@
-﻿using Core.API.AdditionalServiceLibrary;
-using Core.Library.ArivuTharavuThalam;
+﻿using Core.Library.ArivuTharavuThalam;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.API.CQRS.AdditionalService.Controllers
@@ -9,9 +9,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController(PersonDirector personDirector) : ControllerBase
+    public class PersonController(IMediator mediator) : ControllerBase
     {
-        private readonly PersonDirector personDirector = personDirector;
+        private readonly IMediator mediator = mediator;
 
         /// <summary>
         /// Get All Person(s)
@@ -19,8 +19,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet]
         public async Task<IEnumerable<Person>> Get()
         {
-            var result = await personDirector.GetEntitiesAsync(default).ConfigureAwait(false);
-            return result;
+            return await mediator.Send(new GetPersonsQuery(), default).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet("{personId}")]
         public async Task<Person> Get(string personId)
         {
-            var result = await personDirector.GetEntityByIdAsync(personId, default).ConfigureAwait(false);
+            var result = await mediator.Send(new GetPersonByIdQuery(personId), default).ConfigureAwait(false);
             return result;
         }
 
@@ -41,7 +40,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpPut("{personId}")]
         public async Task<long> Put(string personId, Person person)
         {
-            var result = await personDirector.UpdateEntityByIdAsync(personId, person, default).ConfigureAwait(false);
+            var result = await mediator.Send(new UpdatePersonCommand(personId, person), default).ConfigureAwait(false);
             return result;
         }
 
@@ -53,7 +52,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpPut("Many")]
         public async Task<long> PutMany(string searchValue, IEnumerable<Person> persons)
         {
-            var result = await personDirector.UpdateEntitiesAsync(searchValue, persons, default).ConfigureAwait(false);
+            var result = await mediator.Send(new UpdatePersonManyCommand(searchValue, persons), default).ConfigureAwait(false);
             return result;
         }
 
@@ -62,9 +61,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Person
         /// </summary>
         [HttpPost]
-        public async Task<Person> Post(Person person)
+        public async Task<Person> Post(PersonDTO person)
         {
-            var personresult = await personDirector.CreateEntityAsync(person, default).ConfigureAwait(false);
+            var personresult = await mediator.Send(new CreatePersonCommand(person), default).ConfigureAwait(false);
             return personresult;
         }
 
@@ -73,9 +72,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Person(s)
         /// </summary>
         [HttpPost("Many")]
-        public async Task<IEnumerable<Person>> PostMany(IEnumerable<Person> persons)
+        public async Task<IEnumerable<Person>> PostMany(IEnumerable<PersonDTO> persons)
         {
-            var personresult = await personDirector.CreateEntitiesAsync(persons, default).ConfigureAwait(false);
+            var personresult = await mediator.Send(new CreatePersonManyCommand(persons), default).ConfigureAwait(false);
             return personresult;
         }
 
@@ -86,7 +85,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpDelete("{personId}")]
         public async Task<long> Delete(string personId)
         {
-            var result = await personDirector.DeleteEntityByIdAsync(personId, default).ConfigureAwait(false);
+            var result = await mediator.Send(new DeletePersonCommand(personId), default).ConfigureAwait(false);
             return result;
         }
 
@@ -96,7 +95,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpDelete("Many")]
         public async Task<long> DeleteMany()
         {
-            var result = await personDirector.DeleteEntitiesAsync(default).ConfigureAwait(false);
+            var result = await mediator.Send(new DeletePersonManyCommand(), default).ConfigureAwait(false);
             return result;
         }
 
@@ -106,7 +105,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet("LoadAllPersonForNewDatabase")]
         public async Task<IEnumerable<Person>> LoadAllPersonForNewDatabase()
         {
-            var result = await personDirector.LoadAllEntityForNewDatabase(default).ConfigureAwait(false);
+            var result = await mediator.Send(new LoadAllPerssonsQuery(), default).ConfigureAwait(false);
             return result;
         }
     }

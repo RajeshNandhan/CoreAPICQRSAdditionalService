@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.API.CQRS.AdditionalService
 {
-    public record GetBooksByIdQuery(string bookId) : IRequest<Book>;
+    public record GetBooksByIdQuery(string Id) : IRequest<Book>;
 }

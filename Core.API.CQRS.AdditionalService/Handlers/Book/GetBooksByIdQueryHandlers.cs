@@ -17,7 +17,7 @@ namespace Core.API.CQRS.AdditionalService
 
         public async Task<Book> Handle(GetBooksByIdQuery request, CancellationToken cancellationToken)
         {
-            var book = await unitOfWork.BookRepository.GetEntityByIdAsync(request.bookId, cancellationToken);
+            var book = await unitOfWork.BookRepository.GetEntityByIdAsync(request.Id, cancellationToken);
             return book;
         }
     }
