@@ -13,7 +13,6 @@ namespace Core.API.AdditionalServiceLibrary
                 request.Book.edition.ToString(),
                 request.Book.price.ToString(),
                 request.Book.image,
-                request.Book.personId.ToString(),
                 request.messageType,
                 request.messageAction
             });

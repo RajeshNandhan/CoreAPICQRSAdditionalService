@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public record CreateBookManyCommand(IEnumerable<BookDTO> Books) : IRequest<IEnumerable<Book>>;
+    public record CreateBookManyCommand(IEnumerable<BookCreateDTO> Books) : IRequest<IEnumerable<BookDTO>>;
 }

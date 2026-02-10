@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public record CreatePersonManyCommand(IEnumerable<PersonDTO> Persons) : IRequest<IEnumerable<Person>>;
+    public record CreatePersonManyCommand(IEnumerable<PersonCreateDTO> Persons) : IRequest<IEnumerable<PersonDTO>>;
 }

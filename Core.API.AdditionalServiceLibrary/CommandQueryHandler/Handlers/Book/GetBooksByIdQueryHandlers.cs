@@ -1,12 +1,11 @@
-﻿using Core.API.AdditionalServiceLibrary;
-using Core.Library.ArivuTharavuThalam;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 #nullable disable
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public class GetBooksByIdQueryHandlers : IRequestHandler<GetBooksByIdQuery, Book>
+    public class GetBooksByIdQueryHandlers : IRequestHandler<GetBooksByIdQuery, BookDTO>
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -15,10 +14,10 @@ namespace Core.API.AdditionalServiceLibrary
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<Book> Handle(GetBooksByIdQuery request, CancellationToken cancellationToken)
+        public async Task<BookDTO> Handle(GetBooksByIdQuery request, CancellationToken cancellationToken)
         {
             var book = await unitOfWork.BookRepository.GetEntityByIdAsync(request.Id, cancellationToken);
-            return book;
+            return BookMapper.BookToBookDTO(book);
         }
     }
 }

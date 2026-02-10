@@ -1,4 +1,4 @@
-﻿using Core.API.AdditionalServiceLibrary;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
@@ -14,7 +14,8 @@ namespace Core.API.AdditionalServiceLibrary
 
         public async Task<long> Handle(UpdatePersonManyCommand request, CancellationToken cancellationToken)
         {
-            var result = await unitOfWork.PersonRepository.UpdateManyAsync(Persons => true, request.persons, cancellationToken).ConfigureAwait(false);
+            var persons = request.persons.Select(person => PersonMapper.PersonDTOToPerson(person));
+            var result = await unitOfWork.PersonRepository.UpdateManyAsync(Persons => true, persons, cancellationToken).ConfigureAwait(false);
             return result;
         }
     }

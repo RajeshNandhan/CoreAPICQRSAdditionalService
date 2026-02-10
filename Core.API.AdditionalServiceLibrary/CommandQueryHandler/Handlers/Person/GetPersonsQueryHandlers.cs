@@ -1,10 +1,9 @@
-﻿using Core.API.AdditionalServiceLibrary;
-using Core.Library.ArivuTharavuThalam;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public class GetPersonsQueryHandlers : IRequestHandler<GetPersonsQuery, IEnumerable<Person>>
+    public class GetPersonsQueryHandlers : IRequestHandler<GetPersonsQuery, IEnumerable<PersonDTO>>
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -13,11 +12,17 @@ namespace Core.API.AdditionalServiceLibrary
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Person>> Handle(GetPersonsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PersonDTO>> Handle(GetPersonsQuery request, CancellationToken cancellationToken)
         {
             var Persons = await unitOfWork.PersonRepository.GetEntitiesAsync(cancellationToken);
+            var result = Persons.Select(PersonMapper.PersonToPersonDTO);
 
-            return Persons.OrderBy(Person => Person.dateCreated);
+            if (result == null)
+            {
+                return Enumerable.Empty<PersonDTO>();
+            }
+
+            return result.OrderBy(Person => Person.dateCreated);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Core.API.AdditionalServiceLibrary;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 #nullable disable
@@ -21,8 +21,8 @@ namespace Core.API.AdditionalServiceLibrary
             if (book == null)
                 return 0;
 
-            var result = await unitOfWork.BookRepository.UpdateAsync(request.bookId, request.book, cancellationToken).ConfigureAwait(false);
-            
+            var result = await unitOfWork.BookRepository.UpdateAsync(request.bookId, BookMapper.BookDTOToBook(request.book), cancellationToken).ConfigureAwait(false);
+
             return result;
         }
     }

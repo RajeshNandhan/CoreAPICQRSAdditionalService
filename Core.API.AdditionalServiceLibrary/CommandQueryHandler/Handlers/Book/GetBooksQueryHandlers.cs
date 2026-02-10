@@ -1,10 +1,9 @@
-﻿using Core.API.AdditionalServiceLibrary;
-using Core.Library.ArivuTharavuThalam;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public class GetBooksQueryHandlers : IRequestHandler<GetBooksQuery, IEnumerable<Book>>
+    public class GetBooksQueryHandlers : IRequestHandler<GetBooksQuery, IEnumerable<BookDTO>>
     {
         private readonly IUnitOfWork unitOfWork;
 
@@ -13,11 +12,17 @@ namespace Core.API.AdditionalServiceLibrary
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Book>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BookDTO>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
         {
             var books = await unitOfWork.BookRepository.GetEntitiesAsync(cancellationToken);
+            var bookDTOs = books.Select(BookMapper.BookToBookDTO);
 
-            return books.OrderBy(book => book.bookName);
+            if(bookDTOs == null)
+            {
+                return Enumerable.Empty<BookDTO>();
+            }
+
+            return bookDTOs.OrderBy(book => book.bookName);
         }
     }
 }

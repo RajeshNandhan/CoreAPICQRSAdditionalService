@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public class CreateBookCommandHandlers : IRequestHandler<CreateBookCommand, Book>
+    public class CreateBookCommandHandlers : IRequestHandler<CreateBookCommand, BookDTO>
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMediator mediator;
@@ -14,23 +14,15 @@ namespace Core.API.AdditionalServiceLibrary
             this.mediator = mediator;
         }
 
-        public async Task<Book> Handle(CreateBookCommand request, CancellationToken cancellationToken)
+        public async Task<BookDTO> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            var book = new Book
-            {
-                bookName = request.Book.bookName,
-                bookCategory = request.Book.bookCategory,
-                edition = request.Book.edition,
-                price = request.Book.price,
-                image = request.Book.image,
-                personId = request.Book.personId
-            };
+            var book = BookMapper.BookCreateDTOToBook(request.Book);
 
-            await unitOfWork.BookRepository.CreateEntityAsync(book, cancellationToken).ConfigureAwait(false);
+            var result = await unitOfWork.BookRepository.CreateEntityAsync(book, cancellationToken).ConfigureAwait(false);
 
-            await mediator.Send(new MessagePublisherBookCommand(request.Book, MessageTypeConstant.BookType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
+            await mediator.Send(new MessagePublisherBookCommand(result, MessageTypeConstant.BookType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
 
-            return book;
+            return BookMapper.BookToBookDTO(result);
         }
     }
 }

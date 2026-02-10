@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public record GetBooksQuery() : IRequest<IEnumerable<Book>>;
+    public record GetBooksQuery() : IRequest<IEnumerable<BookDTO>>;
 }

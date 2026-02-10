@@ -1,4 +1,4 @@
-﻿using Core.API.AdditionalServiceLibrary;
+﻿using Core.Library.ArivuTharavuThalam;
 using MediatR;
 
 #nullable disable
@@ -21,8 +21,8 @@ namespace Core.API.AdditionalServiceLibrary
             if (Person == null)
                 return 0;
 
-            var result = await unitOfWork.PersonRepository.UpdateAsync(request.personId, request.person, cancellationToken).ConfigureAwait(false);
-            
+            var result = await unitOfWork.PersonRepository.UpdateAsync(request.personId, PersonMapper.PersonDTOToPerson(request.person), cancellationToken).ConfigureAwait(false);
+
             return result;
         }
     }

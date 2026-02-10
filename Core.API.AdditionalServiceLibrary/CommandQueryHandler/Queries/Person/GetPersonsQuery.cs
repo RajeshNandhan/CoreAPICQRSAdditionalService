@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Core.API.AdditionalServiceLibrary
 {
-    public record GetPersonsQuery() : IRequest<IEnumerable<Person>>;
+    public record GetPersonsQuery() : IRequest<IEnumerable<PersonDTO>>;
 }

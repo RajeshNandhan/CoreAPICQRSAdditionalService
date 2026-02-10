@@ -20,7 +20,6 @@ namespace Core.API.AdditionalServiceLibrary
                     item.edition.ToString(),
                     item.price.ToString(),
                     item.image,
-                    item.personId.ToString(),
                     request.messageType,
                     request.messageAction
                 });

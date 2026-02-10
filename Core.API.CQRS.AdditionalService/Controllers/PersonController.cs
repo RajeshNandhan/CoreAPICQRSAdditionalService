@@ -18,7 +18,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Get All Person(s)
         /// </summary>
         [HttpGet]
-        public async Task<IEnumerable<Person>> Get()
+        public async Task<IEnumerable<PersonDTO>> Get()
         {
             return await mediator.Send(new GetPersonsQuery(), default).ConfigureAwait(false);
         }
@@ -28,7 +28,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Id
         /// </summary>
         [HttpGet("{personId}")]
-        public async Task<Person> Get(string personId)
+        public async Task<PersonDTO> Get(string personId)
         {
             var result = await mediator.Send(new GetPersonByIdQuery(personId), default).ConfigureAwait(false);
             return result;
@@ -39,7 +39,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Person, Id
         /// </summary>
         [HttpPut("{personId}")]
-        public async Task<long> Put(string personId, Person person)
+        public async Task<long> Put(string personId, PersonDTO person)
         {
             var result = await mediator.Send(new UpdatePersonCommand(personId, person), default).ConfigureAwait(false);
             return result;
@@ -51,7 +51,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// TODO Update based on searchValue 
         /// </summary>
         [HttpPut("Many")]
-        public async Task<long> PutMany(string searchValue, IEnumerable<Person> persons)
+        public async Task<long> PutMany(string searchValue, IEnumerable<PersonDTO> persons)
         {
             var result = await mediator.Send(new UpdatePersonManyCommand(searchValue, persons), default).ConfigureAwait(false);
             return result;
@@ -62,7 +62,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Person
         /// </summary>
         [HttpPost]
-        public async Task<Person> Post(PersonDTO person)
+        public async Task<PersonDTO> Post(PersonCreateDTO person)
         {
             var personresult = await mediator.Send(new CreatePersonCommand(person), default).ConfigureAwait(false);
             return personresult;
@@ -73,7 +73,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Input - Person(s)
         /// </summary>
         [HttpPost("Many")]
-        public async Task<IEnumerable<Person>> PostMany(IEnumerable<PersonDTO> persons)
+        public async Task<IEnumerable<PersonDTO>> PostMany(IEnumerable<PersonCreateDTO> persons)
         {
             var personresult = await mediator.Send(new CreatePersonManyCommand(persons), default).ConfigureAwait(false);
             return personresult;
@@ -104,7 +104,7 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         /// Load and Create Multiple Person(s), Input - Static Collection
         /// </summary>
         [HttpGet("LoadAllPersonForNewDatabase")]
-        public async Task<IEnumerable<Person>> LoadAllPersonForNewDatabase()
+        public async Task<IEnumerable<PersonDTO>> LoadAllPersonForNewDatabase()
         {
             var result = await mediator.Send(new LoadAllPerssonsQuery(), default).ConfigureAwait(false);
             return result;
