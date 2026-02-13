@@ -15,7 +15,7 @@ namespace Core.API.AdditionalServiceLibrary
         public async Task<long> Handle(UpdateBookManyCommand request, CancellationToken cancellationToken)
         {
             var books = request.books.Select(book => BookMapper.BookDTOToBook(book));
-            var result = await unitOfWork.BookRepository.UpdateManyAsync(books => true, books, cancellationToken).ConfigureAwait(false);
+            var result = await unitOfWork.BookRepository.UpdateManyAsync(books, cancellationToken).ConfigureAwait(false);
             return result;
         }
     }

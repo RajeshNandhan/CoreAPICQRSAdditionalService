@@ -15,7 +15,7 @@ namespace Core.API.AdditionalServiceLibrary
         public async Task<long> Handle(UpdatePersonManyCommand request, CancellationToken cancellationToken)
         {
             var persons = request.persons.Select(person => PersonMapper.PersonDTOToPerson(person));
-            var result = await unitOfWork.PersonRepository.UpdateManyAsync(Persons => true, persons, cancellationToken).ConfigureAwait(false);
+            var result = await unitOfWork.PersonRepository.UpdateManyAsync(persons, cancellationToken).ConfigureAwait(false);
             return result;
         }
     }
