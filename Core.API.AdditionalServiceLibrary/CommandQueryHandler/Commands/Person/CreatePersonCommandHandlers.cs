@@ -20,7 +20,7 @@ namespace Core.API.AdditionalServiceLibrary
 
             var result = await unitOfWork.PersonRepository.CreateEntityAsync(Person, cancellationToken).ConfigureAwait(false);
 
-            await mediator.Send(new MessagePublisherPersonCommand(result, MessageTypeConstant.PersonType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
+            await mediator.Publish(new PersonCreatedEvent(result, MessageTypeConstant.PersonType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
 
             return PersonMapper.PersonToPersonDTO(result);
         }

@@ -20,7 +20,7 @@ namespace Core.API.AdditionalServiceLibrary
 
             var result = await unitOfWork.BookRepository.CreateEntityAsync(book, cancellationToken).ConfigureAwait(false);
 
-            await mediator.Send(new MessagePublisherBookCommand(result, MessageTypeConstant.BookType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
+            await mediator.Publish(new BookCreatedEvent(result, MessageTypeConstant.BookType, MessageActionConstant.Create, cancellationToken), default).ConfigureAwait(false);
 
             return BookMapper.BookToBookDTO(result);
         }

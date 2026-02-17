@@ -17,6 +17,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet]
         public async Task<IEnumerable<BookDTO>> Get()
         {
+            /** Below code is to show the direct call of Command Handler without using Mediator,
+            await GetBooksQueryHandlers.Handle(default).ConfigureAwait(false);
+            **/
             var result = await mediator.Send(new GetBooksQuery(), default).ConfigureAwait(false);
             return result;
         }
@@ -28,6 +31,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet("{bookId}")]
         public async Task<BookDTO> Get(string bookId)
         {
+            /** Below code is to show the direct call of Command Handler without using Mediator,
+            await GetBooksByIdQueryHandlers.Handle(new GetBooksByIdQuery(bookId)).ConfigureAwait(false);
+            **/
             var result = await mediator.Send(new GetBooksByIdQuery(bookId), default).ConfigureAwait(false);
             return result;
         }
@@ -39,6 +45,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpPut("{bookId}")]
         public async Task<long> Put(string bookId, BookDTO book)
         {
+            /** Below code is to show the direct call of Command Handler without using Mediator,
+            await UpdateBookCommandHandlers.Handle(new UpdateBookCommand(bookId, book)).ConfigureAwait(false);
+            **/
             var result = await mediator.Send(new UpdateBookCommand(bookId, book), default).ConfigureAwait(false);
             return result;
         }
@@ -51,6 +60,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpPut("Many")]
         public async Task<long> PutMany(string searchValue, IEnumerable<BookDTO> books)
         {
+            /** Below code is to show the direct call of Command Handler without using Mediator,
+            await UpdateBookManyCommandHandlers.Handle(new UpdateBookManyCommand(searchValue, books), default).ConfigureAwait(false);
+            **/
             var result = await mediator.Send(new UpdateBookManyCommand(searchValue, books), default).ConfigureAwait(false);
             return result;
         }
@@ -62,6 +74,9 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpPost]
         public async Task<BookDTO> Post(BookCreateDTO book)
         {
+            /** Below code is to show the direct call of Command Handler without using Mediator,
+            await CreateBookCommandHandlers.Handle(new CreateBookCommand(book), default).ConfigureAwait(false);
+            **/
             var bookresult = await mediator.Send(new CreateBookCommand(book), default).ConfigureAwait(false);
             return bookresult;
         }
