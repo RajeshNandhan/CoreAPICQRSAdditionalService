@@ -46,12 +46,27 @@ public static class Program
         // Dependency Injection - MediatR
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CQRSStartUp).Assembly));
 
+        // Add CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+        });
+
         // Services
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        // Use CORS
+        app.UseCors("AllowAll");
 
         // Pipeline
         if (app.Environment.IsDevelopment())

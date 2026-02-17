@@ -17,7 +17,8 @@ namespace Core.API.CQRS.AdditionalService.Controllers
         [HttpGet]
         public async Task<IEnumerable<BookDTO>> Get()
         {
-            return await mediator.Send(new GetBooksQuery(), default).ConfigureAwait(false);
+            var result = await mediator.Send(new GetBooksQuery(), default).ConfigureAwait(false);
+            return result;
         }
 
         /// <summary>
